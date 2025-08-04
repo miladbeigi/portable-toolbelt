@@ -59,6 +59,7 @@ for tool in "${TOOLS_TO_INSTALL[@]}"; do
     echo "[INFO] $tool installed successfully."
   else
     echo "[ERROR] No install script found for tool: $tool"
+    exit 1
   fi
 done
 
