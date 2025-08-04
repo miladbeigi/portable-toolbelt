@@ -2,6 +2,10 @@
 
 A collection of portable scripts for quickly setting up essential tools on servers.
 
+## Getting Started
+
+To get started, you need to have curl installed.
+
 ### Running on ubuntu/debian distributions
 
 Make sure you have curl installed.
@@ -29,3 +33,9 @@ Then run the installer.
 ```bash
 curl -sSL https://milad.cloud/toolbelt | bash -s -- --tools=vim
 ```
+
+## Available Tools
+
+- vim
+- wget
+- htop
