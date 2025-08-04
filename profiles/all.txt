@@ -1,0 +1,10 @@
+vim
+htop
+screen
+jq
+yq
+wget
+nmap
+tcpdump
+openssl
+gpg
