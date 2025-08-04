@@ -8,4 +8,3 @@ nmap
 tcpdump
 openssl
 gpg
-docker
