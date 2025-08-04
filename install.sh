@@ -3,7 +3,6 @@
 set -e
 
 # --------- Load Core Utilities ----------
-cd ~/.local/share/portable-toolbelt/
 source src/core/detect_os.sh
 
 # --------- OS Detection --------------

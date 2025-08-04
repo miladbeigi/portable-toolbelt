@@ -5,14 +5,8 @@ detect_os() {
     . /etc/os-release
     OS_ID="${ID,,}"  # lowercase
     case "$OS_ID" in
-      ubuntu|debian)
+      ubuntu|debian|pop)
         DISTRO_NAME="ubuntu"
-        ;;
-      centos|rhel)
-        DISTRO_NAME="redhat"
-        ;;
-      fedora)
-        DISTRO_NAME="fedora"
         ;;
       alpine)
         DISTRO_NAME="alpine"

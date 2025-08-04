@@ -4,29 +4,48 @@ set -e
 
 # ASCII ART
 ascii_art=$(cat << "EOF"
-__________              __        ___.   .__    ___________           .__ ___.          .__   __   
-\______   \____________/  |______ \_ |__ |  |   \__    ___/___   ____ |  |\_ |__   ____ |  |_/  |_ 
- |     ___/  _ \_  __ \   __\__  \ | __ \|  |     |    | /  _ \ /  _ \|  | | __ \_/ __ \|  |\   __\
- |    |  (  <_> )  | \/|  |  / __ \| \_\ \  |__   |    |(  <_> |  <_> )  |_| \_\ \  ___/|  |_|  |  
- |____|   \____/|__|   |__| (____  /___  /____/   |____| \____/ \____/|____/___  /\___  >____/__|  
-                                 \/    \/                                      \/     \/           
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⢠⣶⣶⣶⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣷⣄⢀⣸⣿⣿⣿⣿⣄⠀⣴⣿⣿⣶⣄⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀
+⠀⠀⢀⣴⣦⣤⣠⣾⣿⣿⣿⠟⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣀⣤⣤⡄⠀
+⠀⠀⣾⣿⣿⣿⣿⣿⣿⠟⠁⠀⠀⢙⣿⣿⣿⣿⣿⡿⠋⢹⣿⣿⣿⣿⣿⣿⣿⡆
+⠀⠀⠉⠻⣿⣿⣿⡿⠁⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⠃⠀⠻⠿⠃⣿⣿⣿⣿⠋⠀
+⣡⣀⣀⣼⣿⣿⣿⡇⠀⠀⣠⡟⠉⠙⢿⣿⣿⡿⠉⠀⢀⣨⣤⣴⣿⣿⣿⣿⣀⣀
+⢸⣿⣿⣿⣿⣿⣿⣷⣠⣾⣿⣿⣦⡄⣠⡿⠃⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠁⠀⣠⡾⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⠀⠀⢙⣿⣿⣿⣿⣿⠿⠿⠟⠁⠀⣠⣾⣧⡀⠀⠈⠻⣿⣿⣿⣿⣿⣿⡏⠀⠀
+⠀⠀⣵⣿⣿⣿⣿⣿⠁⣾⡀⠀⢠⣾⣿⣿⣿⣿⣦⡀⠀⠈⢻⣿⣿⣿⣿⣿⣶⡀
+⠀⠀⢻⣿⣿⣿⣿⣿⣼⣿⡟⠀⣼⣿⣿⣿⣿⣿⣿⣿⣦⣤⣾⣿⣿⣿⣿⣿⣿⠃
+⠀⠀⠀⠙⠉⠁⠈⣻⣿⣿⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⠀⠉⠙⠁⠀
+⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⡿⢿⣿⣿⣿⣿⣿⣿⠿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠙⠻⢿⠏⠀⠀⢸⣿⣿⣿⣿⠀⠀⠘⠿⠿⠛⠁⠀⠀⠀⠀⠀
 EOF
 )
 
 echo -e "$ascii_art"
 
-# Detect OS
+# If user is root, sudo is not needed
+if [[ $EUID -eq 0 ]]; then
+  SUDO=""
+  echo -e "\n[INFO] User is root, sudo is not needed"
+else
+  SUDO="sudo"
+  echo -e "\n[INFO] User is not root, sudo is needed"
+fi
+
+# Detect Package Manager
+echo -e "\n[INFO] Detecting the package manager..."
 if [[ -f /etc/os-release ]]; then
   . /etc/os-release
   OS_ID="${ID,,}"  # lowercase
   case "$OS_ID" in
-    ubuntu|debian)
-      DISTRO_NAME="ubuntu"
+    ubuntu|debian|pop)
       PACKAGE_MANAGER="apt"
+      echo "[INFO] Detected APT package manager"
       ;;
     alpine)
-      DISTRO_NAME="alpine"
       PACKAGE_MANAGER="apk"
+      echo "[INFO] Detected APK package manager"
       ;;
     *)
       echo "[ERROR] Unsupported or unrecognized distro: $OS_ID"
@@ -36,18 +55,22 @@ if [[ -f /etc/os-release ]]; then
 fi
 
 # Install Git
+echo -e "\n[INFO] Installing Git..."
+
 if [[ $PACKAGE_MANAGER == "apt" ]]; then
-  sudo apt-get update && sudo apt-get install -y git
+  $SUDO apt-get update && $SUDO apt-get install -y git
 elif [[ $PACKAGE_MANAGER == "apk" ]]; then
-  sudo apk add git
+  $SUDO apk add git
 else
   echo "[ERROR] Unsupported package manager: $PACKAGE_MANAGER"
   exit 1
 fi
 
-echo "Cloning repo..."
+echo -e "\n[INFO] Cloning repo..."
+
 rm -rf ~/.local/share/portable-toolbelt
 git clone https://github.com/miladbeigi/portable-toolbelt.git ~/.local/share/portable-toolbelt >/dev/null
 
-echo "Installation starting..."
-source ~/.local/share/portable-toolbelt/install.sh
+echo -e "\n[INFO] Installation starting..."
+cd ~/.local/share/portable-toolbelt/
+source install.sh
