@@ -1,0 +1,26 @@
+name: Tests
+
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+
+jobs:
+  # Integration tests using matrix strategy
+  integration:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu, alpine]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and test ${{ matrix.os }} integration
+        run: |
+          echo "🔧 Building ${{ matrix.os }} integration test container..."
+          docker build -f tests/integration/${{ matrix.os }}.Dockerfile -t toolbelt-${{ matrix.os }}-test .
