@@ -1,0 +1,4 @@
+nmap
+tcpdump
+openssl
+gpg

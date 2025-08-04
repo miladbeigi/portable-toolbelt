@@ -1,0 +1,5 @@
+vim
+htop
+screen
+jq
+yq
