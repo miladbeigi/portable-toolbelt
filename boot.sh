@@ -42,10 +42,12 @@ if [[ -f /etc/os-release ]]; then
     ubuntu|debian|pop)
       PACKAGE_MANAGER="apt"
       echo "[INFO] Detected APT package manager"
+      $SUDO apt-get update
       ;;
     alpine)
       PACKAGE_MANAGER="apk"
       echo "[INFO] Detected APK package manager"
+      $SUDO apk update
       ;;
     *)
       echo "[ERROR] Unsupported or unrecognized distro: $OS_ID"
@@ -54,16 +56,17 @@ if [[ -f /etc/os-release ]]; then
   esac
 fi
 
-# Install Git
-echo -e "\n[INFO] Installing Git..."
-
-if [[ $PACKAGE_MANAGER == "apt" ]]; then
-  $SUDO apt-get update && $SUDO apt-get install -y git
-elif [[ $PACKAGE_MANAGER == "apk" ]]; then
-  $SUDO apk add git
-else
-  echo "[ERROR] Unsupported package manager: $PACKAGE_MANAGER"
-  exit 1
+# Check if Git is installed
+if ! command -v git &> /dev/null; then
+  echo -e "\n[INFO] Git is not installed. Installing..."
+  if [[ $PACKAGE_MANAGER == "apt" ]]; then
+    $SUDO apt-get install -y git
+  elif [[ $PACKAGE_MANAGER == "apk" ]]; then
+    $SUDO apk add git
+  else
+    echo "[ERROR] Unsupported package manager: $PACKAGE_MANAGER"
+    exit 1
+  fi
 fi
 
 echo -e "\n[INFO] Cloning repo..."

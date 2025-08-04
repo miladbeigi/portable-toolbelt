@@ -39,3 +39,9 @@ curl -sSL https://milad.cloud/toolbelt | bash -s -- --tools=vim
 - vim
 - wget
 - htop
+
+## Available Profiles
+
+| Profile | Description | Tools |
+|---------|-------------|-------|
+| core    | Core Tools  | vim, htop |
