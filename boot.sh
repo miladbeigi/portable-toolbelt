@@ -2,7 +2,7 @@
 
 set -e
 
-# PORTABLE TOOLBELT
+# ASCII ART
 ascii_art=$(cat << "EOF"
 __________              __        ___.   .__    ___________           .__ ___.          .__   __   
 \______   \____________/  |______ \_ |__ |  |   \__    ___/___   ____ |  |\_ |__   ____ |  |_/  |_ 
@@ -14,6 +14,36 @@ EOF
 )
 
 echo -e "$ascii_art"
+
+# Detect OS
+if [[ -f /etc/os-release ]]; then
+  . /etc/os-release
+  OS_ID="${ID,,}"  # lowercase
+  case "$OS_ID" in
+    ubuntu|debian)
+      DISTRO_NAME="ubuntu"
+      PACKAGE_MANAGER="apt"
+      ;;
+    alpine)
+      DISTRO_NAME="alpine"
+      PACKAGE_MANAGER="apk"
+      ;;
+    *)
+      echo "[ERROR] Unsupported or unrecognized distro: $OS_ID"
+      exit 1
+      ;;
+  esac
+fi
+
+# Install Git
+if [[ $PACKAGE_MANAGER == "apt" ]]; then
+  sudo apt-get update && sudo apt-get install -y git
+elif [[ $PACKAGE_MANAGER == "apk" ]]; then
+  sudo apk add git
+else
+  echo "[ERROR] Unsupported package manager: $PACKAGE_MANAGER"
+  exit 1
+fi
 
 echo "Cloning repo..."
 rm -rf ~/.local/share/portable-toolbelt
