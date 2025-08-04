@@ -26,12 +26,6 @@ sudo apt update && sudo apt install curl -y
 
 # Install with default core profile
 curl -sSL https://milad.cloud/toolbelt | bash -s
-
-# Install specific tools
-curl -sSL https://milad.cloud/toolbelt | bash -s -- --tools=vim,htop,jq
-
-# Install with a profile
-curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=dev
 ```
 
 **Alpine Linux:**
@@ -41,12 +35,6 @@ apk update && apk add curl bash
 
 # Install with default core profile
 curl -sSL https://milad.cloud/toolbelt | bash -s
-
-# Install specific tools
-curl -sSL https://milad.cloud/toolbelt | bash -s -- --tools=vim,htop,jq
-
-# Install with a profile
-curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=dev
 ```
 
 ## 📦 Available Tools
@@ -114,7 +102,6 @@ curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=security
 2. **Package Manager Selection**: Uses the appropriate package manager (apt/apk)
 3. **Tool Installation**: Installs tools using native package managers
 4. **Profile Processing**: Loads tool lists from profile files
-5. **Error Handling**: Provides clear error messages for unsupported systems
 
 ## 🏗️ Architecture
 
@@ -177,13 +164,3 @@ install_your_tool() {
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Inspired by the need for quick tool provisioning on fresh servers
-- Built with simplicity and portability in mind
-- Thanks to the open-source community for the tools included
-
----
-
-**Made with ❤️ for the DevOps community**
