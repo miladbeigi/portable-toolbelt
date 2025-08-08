@@ -3,3 +3,5 @@ htop
 screen
 jq
 yq
+curl
+bash
