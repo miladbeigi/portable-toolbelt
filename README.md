@@ -39,16 +39,43 @@ curl -sSL https://milad.cloud/toolbelt | bash -s
 
 ## 📦 Available Tools
 
+### Core Tools
 | Tool | Description | Use Case |
 |------|-------------|----------|
 | `vim` | Text editor | File editing and configuration |
 | `htop` | Process viewer | System monitoring |
+| `curl` | HTTP client | API calls and data transfer |
+| `bash` | Shell | Scripting and automation |
+
+### Development Tools
+| Tool | Description | Use Case |
+|------|-------------|----------|
 | `screen` | Terminal multiplexer | Session management |
 | `jq` | JSON processor | JSON data manipulation |
 | `yq` | YAML processor | YAML data manipulation |
 | `wget` | File downloader | File downloads |
+
+### Network Troubleshooting Tools
+| Tool | Description | Use Case |
+|------|-------------|----------|
 | `nmap` | Network scanner | Network reconnaissance |
 | `tcpdump` | Packet analyzer | Network debugging |
+| `net-tools` | Legacy networking | Interface and route management |
+| `iproute2` | Modern networking | Advanced network configuration |
+| `mtr` | Real-time traceroute | Route path analysis |
+| `dig` | DNS lookup | DNS troubleshooting |
+| `nslookup` | DNS query | Name resolution testing |
+| `wireshark-cli` | Packet analysis | Deep packet inspection |
+| `netcat` | Network connectivity | Port testing and data transfer |
+| `telnet` | Basic connectivity | Service testing |
+| `iperf3` | Bandwidth testing | Network performance measurement |
+| `speedtest-cli` | Internet speed test | Connection speed verification |
+| `iftop` | Real-time bandwidth | Network usage monitoring |
+| `nethogs` | Per-process usage | Application network analysis |
+
+### Security Tools
+| Tool | Description | Use Case |
+|------|-------------|----------|
 | `openssl` | SSL/TLS toolkit | Certificate management |
 | `gpg` | Encryption tool | File encryption/signing |
 
@@ -58,6 +85,8 @@ curl -sSL https://milad.cloud/toolbelt | bash -s
 Essential tools for basic system administration:
 - `vim` - Text editor
 - `htop` - Process viewer
+- `curl` - HTTP client
+- `bash` - Shell
 
 ### Developer Profile (`--profile=dev`)
 Tools for development and debugging:
@@ -66,6 +95,15 @@ Tools for development and debugging:
 - `screen` - Terminal multiplexer
 - `jq` - JSON processor
 - `yq` - YAML processor
+- `curl` - HTTP client
+- `bash` - Shell
+
+### Network Profile (`--profile=network`)
+Comprehensive network troubleshooting and diagnostics:
+- **Core utilities**: net-tools, iproute2, curl, wget
+- **Diagnostics**: nmap, tcpdump, ping, traceroute, mtr, dig, nslookup
+- **Security**: openssl, wireshark-cli, netcat, telnet
+- **Performance**: iperf3, speedtest-cli, iftop, nethogs
 
 ### Security Profile (`--profile=security`)
 Tools for security analysis and network debugging:
@@ -73,6 +111,10 @@ Tools for security analysis and network debugging:
 - `tcpdump` - Packet analyzer
 - `openssl` - SSL/TLS toolkit
 - `gpg` - Encryption tool
+
+### All Tools Profile (`--profile=all`)
+Complete toolset with all available tools (24 tools total):
+- All core, development, network, and security tools
 
 ## 💡 Usage Examples
 
@@ -96,6 +138,18 @@ curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=dev
 curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=security
 ```
 
+### Install with network profile
+```bash
+curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=network
+```
+
+### Install with all tools
+```bash
+curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=all
+```
+
+
+
 ## 🔧 How It Works
 
 1. **OS Detection**: Automatically detects your Linux distribution
@@ -109,57 +163,51 @@ curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=security
 portable-toolbelt/
 ├── install.sh          # Main installer script
 ├── boot.sh            # Bootstrap script for remote installation
+├── Makefile           # Convenient targets for testing
 ├── profiles/          # Pre-configured tool profiles
-│   ├── core.txt       # Core tools
-│   ├── dev.txt        # Developer tools
-│   └── security.txt   # Security tools
+│   ├── core.txt       # Core tools (4 tools)
+│   ├── dev.txt        # Developer tools (7 tools)
+│   ├── network.txt    # Network troubleshooting (18 tools)
+│   ├── security.txt   # Security tools (4 tools)
+│   └── all.txt        # All tools (24 tools)
 ├── src/
 │   ├── core/          # Core utilities
 │   │   └── detect_os.sh
 │   └── tools/         # Individual tool installers
 │       ├── vim.sh
 │       ├── htop.sh
-│       └── ...
+│       ├── curl.sh
+│       ├── bash.sh
+│       └── ...        # 20+ tool installers
+├── tests/             # Testing infrastructure
+│   ├── integration/   # Docker integration tests
+│   └── test-docker.sh # Docker testing script
 └── configs/           # Configuration files (future use)
 ```
 
-## 🤝 Contributing
+## 🧪 Testing
 
-Contributions are welcome! Here's how you can help:
-
-1. **Add new tools**: Create install scripts in `src/tools/`
-2. **Add new profiles**: Create profile files in `profiles/`
-3. **Support new OS**: Extend OS detection in `src/core/detect_os.sh`
-4. **Improve documentation**: Update README and add examples
-5. **Report issues**: Open GitHub issues for bugs or feature requests
-
-### Adding a New Tool
-
-1. Create `src/tools/your-tool.sh`:
+### Local Development Testing
 ```bash
-#!/usr/bin/env bash
+# Test all Docker containers
+make test
 
-set -e
+# Test specific distribution
+make test-alpine
+make test-ubuntu
 
-install_your_tool() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      $SUDO apt update -y
-      $SUDO apt install -y your-tool
-      ;;
-    alpine)
-      $SUDO apk update
-      $SUDO apk add your-tool
-      ;;
-    *)
-      echo "[ERROR] Your-tool install not supported on this distro: $DISTRO_NAME"
-      exit 1
-      ;;
-  esac
-}
+# Clean up test images
+make clean
 ```
 
-2. Add the tool to appropriate profiles in `profiles/`
+### Manual Docker Testing
+```bash
+# Test Alpine Linux
+docker build -f tests/integration/alpine.Dockerfile -t toolbelt-test:alpine .
+
+# Test Ubuntu
+docker build -f tests/integration/ubuntu.Dockerfile -t toolbelt-test:ubuntu .
+```
 
 ## 📄 License
 
