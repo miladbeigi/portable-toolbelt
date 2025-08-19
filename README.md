@@ -79,6 +79,18 @@ curl -sSL https://milad.cloud/toolbelt | bash -s
 | `openssl` | SSL/TLS toolkit | Certificate management |
 | `gpg` | Encryption tool | File encryption/signing |
 
+### Python Development Tools
+| Tool | Description | Use Case |
+|------|-------------|----------|
+| `python3` | Python interpreter | Running Python scripts and applications |
+| `pipx` | Python app installer | Installing CLI tools in isolated environments |
+| `poetry` | Dependency manager | Python project management and packaging |
+| `black` | Code formatter | Automatic Python code formatting |
+| `ruff` | Linter & formatter | Fast Python code analysis and formatting |
+| `mypy` | Type checker | Static type analysis for Python |
+| `pytest` | Testing framework | Python unit and integration testing |
+| `pre-commit` | Git hooks | Automated code quality checks |
+
 ## 🎯 Available Profiles
 
 ### Core Profile (`--profile=core`)
@@ -112,9 +124,20 @@ Tools for security analysis and network debugging:
 - `openssl` - SSL/TLS toolkit
 - `gpg` - Encryption tool
 
+### Python Profile (`--profile=python`)
+Python development tools and packages (installed via pipx for clean CLI management):
+- `python3` - Python interpreter with venv support
+- `pipx` - Install Python applications in isolated environments
+- `poetry` - Python dependency management and packaging
+- `black` - Python code formatter
+- `ruff` - Fast Python linter and formatter
+- `mypy` - Static type checker for Python
+- `pytest` - Python testing framework
+- `pre-commit` - Git pre-commit hooks framework
+
 ### All Tools Profile (`--profile=all`)
-Complete toolset with all available tools (24 tools total):
-- All core, development, network, and security tools
+Complete toolset with all available tools (32 tools total):
+- All core, development, network, security, and Python tools
 
 ## 💡 Usage Examples
 
@@ -136,6 +159,11 @@ curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=dev
 ### Install with security profile
 ```bash
 curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=security
+```
+
+### Install with Python development profile
+```bash
+curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=python
 ```
 
 ### Install with network profile

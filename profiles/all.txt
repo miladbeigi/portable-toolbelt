@@ -22,3 +22,11 @@ iperf3
 speedtest-cli
 iftop
 nethogs
+python3
+pipx
+poetry
+black
+ruff
+mypy
+pytest
+pre-commit
