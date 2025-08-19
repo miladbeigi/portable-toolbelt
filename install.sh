@@ -10,6 +10,15 @@ DEFAULT_PROFILE="core"
 # --------- Load Core Utilities ----------
 source src/core/detect_os.sh
 
+# --------- Set SUDO Variable ----------
+if [[ $EUID -eq 0 ]]; then
+  SUDO=""
+  echo "[INFO] User is root, sudo is not needed"
+else
+  SUDO="sudo"
+  echo "[INFO] User is not root, sudo is needed"
+fi
+
 # --------- OS Detection --------------
 detect_os
 echo "[INFO] Detected OS: $DISTRO_NAME"
