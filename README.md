@@ -197,7 +197,8 @@ portable-toolbelt/
 │   ├── dev.txt        # Developer tools (7 tools)
 │   ├── network.txt    # Network troubleshooting (18 tools)
 │   ├── security.txt   # Security tools (4 tools)
-│   └── all.txt        # All tools (24 tools)
+│   ├── python.txt     # Python development tools (8 tools)
+│   └── all.txt        # All tools (32 tools)
 ├── src/
 │   ├── core/          # Core utilities
 │   │   └── detect_os.sh
@@ -206,7 +207,7 @@ portable-toolbelt/
 │       ├── htop.sh
 │       ├── curl.sh
 │       ├── bash.sh
-│       └── ...        # 20+ tool installers
+│       └── ...        # 32+ tool installers
 ├── tests/             # Testing infrastructure
 │   ├── integration/   # Docker integration tests
 │   └── test-docker.sh # Docker testing script
