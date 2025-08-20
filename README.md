@@ -79,6 +79,12 @@ curl -sSL https://milad.cloud/toolbelt | bash -s
 | `openssl` | SSL/TLS toolkit | Certificate management |
 | `gpg` | Encryption tool | File encryption/signing |
 
+### Python Development Tools
+| Tool | Description | Use Case |
+|------|-------------|----------|
+| `python3` | Python interpreter | Running Python scripts and applications |
+| `pytest` | Testing framework | Python unit and integration testing |
+
 ## 🎯 Available Profiles
 
 ### Core Profile (`--profile=core`)
@@ -112,9 +118,14 @@ Tools for security analysis and network debugging:
 - `openssl` - SSL/TLS toolkit
 - `gpg` - Encryption tool
 
+### Python Profile (`--profile=python`)
+Python development tools and packages:
+- `python3` - Python interpreter with venv support
+- `pytest` - Testing framework
+
 ### All Tools Profile (`--profile=all`)
-Complete toolset with all available tools (24 tools total):
-- All core, development, network, and security tools
+Complete toolset with all available tools:
+- All core, development, network, security, and Python tools
 
 ## 💡 Usage Examples
 
@@ -136,6 +147,11 @@ curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=dev
 ### Install with security profile
 ```bash
 curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=security
+```
+
+### Install with Python development profile
+```bash
+curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=python
 ```
 
 ### Install with network profile
@@ -165,11 +181,12 @@ portable-toolbelt/
 ├── boot.sh            # Bootstrap script for remote installation
 ├── Makefile           # Convenient targets for testing
 ├── profiles/          # Pre-configured tool profiles
-│   ├── core.txt       # Core tools (4 tools)
-│   ├── dev.txt        # Developer tools (7 tools)
-│   ├── network.txt    # Network troubleshooting (18 tools)
-│   ├── security.txt   # Security tools (4 tools)
-│   └── all.txt        # All tools (24 tools)
+│   ├── core.txt       # Core tools
+│   ├── dev.txt        # Developer tools
+│   ├── network.txt    # Network troubleshooting
+│   ├── security.txt   # Security tools
+│   ├── python.txt     # Python development tools
+│   └── all.txt        # All tools
 ├── src/
 │   ├── core/          # Core utilities
 │   │   └── detect_os.sh
@@ -178,7 +195,7 @@ portable-toolbelt/
 │       ├── htop.sh
 │       ├── curl.sh
 │       ├── bash.sh
-│       └── ...        # 20+ tool installers
+│       └── ...        # other tool installers
 ├── tests/             # Testing infrastructure
 │   ├── integration/   # Docker integration tests
 │   └── test-docker.sh # Docker testing script

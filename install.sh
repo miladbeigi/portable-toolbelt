@@ -9,6 +9,7 @@ DEFAULT_PROFILE="core"
 
 # --------- Load Core Utilities ----------
 source src/core/detect_os.sh
+source src/core/set_sudo.sh
 
 # --------- OS Detection --------------
 detect_os

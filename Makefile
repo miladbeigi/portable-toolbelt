@@ -3,11 +3,11 @@
 # Default target
 help:
 	@echo "Available targets:"
-	@echo "  test-docker    - Run all Docker tests (Alpine + Ubuntu)"
-	@echo "  test-alpine    - Test Alpine Linux container only"
-	@echo "  test-ubuntu    - Test Ubuntu container only"
-	@echo "  clean-docker   - Remove test Docker images"
-	@echo "  help          - Show this help message"
+	@echo "  test-docker        - Run all Docker tests (Alpine + Ubuntu)"
+	@echo "  test-alpine        - Test Alpine Linux container only"
+	@echo "  test-ubuntu        - Test Ubuntu container only"
+	@echo "  clean-docker       - Remove test Docker images"
+	@echo "  help               - Show this help message"
 
 # Test all Docker containers
 test-docker: test-alpine test-ubuntu

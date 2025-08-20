@@ -22,3 +22,5 @@ iperf3
 speedtest-cli
 iftop
 nethogs
+python3
+pytest
