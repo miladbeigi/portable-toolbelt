@@ -50,18 +50,86 @@ if [[ -n "$PROFILE" ]]; then
   fi
 fi
 
+# --------- Display Tools to Install ----------
+display_tools_to_install() {
+  echo ""
+  echo "================================================="
+  echo "           PACKAGES TO BE INSTALLED"
+  echo "================================================="
+  if [[ -n "$PROFILE" ]]; then
+    echo "Profile: $PROFILE"
+    echo ""
+  fi
+  echo "The following ${#TOOLS_TO_INSTALL[@]} tool(s) will be installed:"
+  echo ""
+  for i in "${!TOOLS_TO_INSTALL[@]}"; do
+    printf "  %2d. %s\n" $((i+1)) "${TOOLS_TO_INSTALL[$i]}"
+  done
+  echo ""
+  echo "================================================="
+  echo ""
+}
+
+# Show tools to be installed
+if [[ ${#TOOLS_TO_INSTALL[@]} -gt 0 ]]; then
+  display_tools_to_install
+fi
+
 # --------- Install Tools ----------
+INSTALLED_TOOLS=()
+FAILED_TOOLS=()
+
 for tool in "${TOOLS_TO_INSTALL[@]}"; do
   TOOL_SCRIPT="src/tools/${tool}.sh"
   if [[ -f "$TOOL_SCRIPT" ]]; then
     echo "[INFO] Installing $tool..."
-    source "$TOOL_SCRIPT"
-    install_"$tool"
-    echo "[INFO] $tool installed successfully."
+    if source "$TOOL_SCRIPT" && install_"$tool"; then
+      echo "[INFO] $tool installed successfully."
+      INSTALLED_TOOLS+=("$tool")
+    else
+      echo "[ERROR] Failed to install $tool."
+      FAILED_TOOLS+=("$tool")
+    fi
   else
     echo "[ERROR] No install script found for tool: $tool"
-    exit 1
+    FAILED_TOOLS+=("$tool")
   fi
 done
 
-echo "[INFO] All requested tools processed."
+# --------- Display Installation Summary ----------
+display_installation_summary() {
+  echo ""
+  echo "================================================="
+  echo "           INSTALLATION SUMMARY"
+  echo "================================================="
+  
+  if [[ ${#INSTALLED_TOOLS[@]} -gt 0 ]]; then
+    echo "✅ Successfully installed (${#INSTALLED_TOOLS[@]} tool(s)):"
+    echo ""
+    for i in "${!INSTALLED_TOOLS[@]}"; do
+      printf "  %2d. %s\n" $((i+1)) "${INSTALLED_TOOLS[$i]}"
+    done
+    echo ""
+  fi
+  
+  if [[ ${#FAILED_TOOLS[@]} -gt 0 ]]; then
+    echo "❌ Failed to install (${#FAILED_TOOLS[@]} tool(s)):"
+    echo ""
+    for i in "${!FAILED_TOOLS[@]}"; do
+      printf "  %2d. %s\n" $((i+1)) "${FAILED_TOOLS[$i]}"
+    done
+    echo ""
+  fi
+  
+  echo "================================================="
+  
+  if [[ ${#FAILED_TOOLS[@]} -gt 0 ]]; then
+    echo "[WARNING] Some tools failed to install. Check the logs above for details."
+    exit 1
+  else
+    echo "[INFO] All requested tools processed successfully."
+  fi
+}
+
+# Show installation summary
+display_installation_summary
