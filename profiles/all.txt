@@ -23,6 +23,4 @@ speedtest-cli
 iftop
 nethogs
 python3
-pip
 pytest
-black
