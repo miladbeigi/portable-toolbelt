@@ -23,10 +23,6 @@ speedtest-cli
 iftop
 nethogs
 python3
-pipx
-poetry
-black
-ruff
-mypy
+pip
 pytest
-pre-commit
+black

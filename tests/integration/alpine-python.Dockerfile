@@ -7,12 +7,14 @@ RUN apk update && apk add curl bash git
 COPY . /toolbelt
 WORKDIR /toolbelt
 
-# Make install script executable and run core Python tools
+# Make install script executable and run Python profile
 RUN chmod +x install.sh && \
-    ./install.sh --tools=python3,pipx
+    ./install.sh --profile=python
 
-# Test basic Python tools are available
+# Test Python tools are available
 RUN which python3 && \
-    which pipx && \
+    which pip && \
+    which pytest && \
+    which black && \
     python3 --version && \
-    pipx --version
+    pip --version
