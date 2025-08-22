@@ -9,6 +9,10 @@ install_dig() {
         "alpine")
             $SUDO apk add --no-cache bind-tools
             ;;
+        "fedora")
+            # RHEL/Fedora uses 'bind-utils' package for dig command
+            $SUDO ${PACKAGE_MANAGER:-dnf} install -y bind-utils
+            ;;
         *)
             echo "[ERROR] Unsupported distribution: $DISTRO_NAME"
             exit 1

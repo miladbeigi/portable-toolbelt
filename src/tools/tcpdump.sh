@@ -13,6 +13,10 @@ install_tcpdump() {
       $SUDO apk add tcpdump
       ;;
 
+    fedora)
+      $SUDO ${PACKAGE_MANAGER:-dnf} install -y tcpdump
+      ;;
+
     *)
       echo "[ERROR] tcpdump install not supported on distro: $DISTRO_NAME"
       exit 1

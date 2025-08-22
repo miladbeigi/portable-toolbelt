@@ -9,6 +9,9 @@ install_bash() {
         "alpine")
             $SUDO apk add --no-cache bash
             ;;
+        "fedora")
+            $SUDO ${PACKAGE_MANAGER:-dnf} install -y bash
+            ;;
         *)
             echo "[ERROR] Unsupported distribution: $DISTRO_NAME"
             exit 1

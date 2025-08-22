@@ -9,6 +9,9 @@ install_iperf3() {
         "alpine")
             $SUDO apk add --no-cache iperf3
             ;;
+        "fedora")
+            $SUDO ${PACKAGE_MANAGER:-dnf} install -y iperf3
+            ;;
         *)
             echo "[ERROR] Unsupported distribution: $DISTRO_NAME"
             exit 1

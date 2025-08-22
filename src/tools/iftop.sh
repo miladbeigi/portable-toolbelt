@@ -9,6 +9,9 @@ install_iftop() {
         "alpine")
             $SUDO apk add --no-cache iftop
             ;;
+        "fedora")
+            $SUDO ${PACKAGE_MANAGER:-dnf} install -y iftop
+            ;;
         *)
             echo "[ERROR] Unsupported distribution: $DISTRO_NAME"
             exit 1

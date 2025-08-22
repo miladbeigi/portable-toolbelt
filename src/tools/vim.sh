@@ -12,6 +12,9 @@ install_vim() {
       $SUDO apk update
       $SUDO apk add vim
       ;;
+    fedora)
+      $SUDO ${PACKAGE_MANAGER:-dnf} install -y vim-enhanced
+      ;;
     *)
       echo "[ERROR] Vim install not supported on this distro: $DISTRO_NAME"
       exit 1

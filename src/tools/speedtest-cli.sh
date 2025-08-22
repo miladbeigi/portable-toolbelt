@@ -9,6 +9,9 @@ install_speedtest-cli() {
         "alpine")
             $SUDO apk add --no-cache speedtest-cli
             ;;
+        "fedora")
+            $SUDO ${PACKAGE_MANAGER:-dnf} install -y python3-speedtest-cli
+            ;;
         *)
             echo "[ERROR] Unsupported distribution: $DISTRO_NAME"
             exit 1

@@ -9,6 +9,9 @@ install_wireshark-cli() {
         "alpine")
             $SUDO apk add --no-cache wireshark
             ;;
+        "fedora")
+            $SUDO ${PACKAGE_MANAGER:-dnf} install -y wireshark-cli
+            ;;
         *)
             echo "[ERROR] Unsupported distribution: $DISTRO_NAME"
             exit 1

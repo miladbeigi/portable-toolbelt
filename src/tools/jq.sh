@@ -13,6 +13,10 @@ install_jq() {
       $SUDO apk add jq
       ;;
 
+    fedora)
+      $SUDO ${PACKAGE_MANAGER:-dnf} install -y jq
+      ;;
+
     *)
       echo "[ERROR] jq install not supported on distro: $DISTRO_NAME"
       exit 1

@@ -13,6 +13,10 @@ install_screen() {
       $SUDO apk add screen
       ;;
 
+    fedora)
+      $SUDO ${PACKAGE_MANAGER:-dnf} install -y screen
+      ;;
+
     *)
       echo "[ERROR] screen install not supported on distro: $DISTRO_NAME"
       exit 1

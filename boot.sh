@@ -49,6 +49,21 @@ if [[ -f /etc/os-release ]]; then
       echo "[INFO] Detected APK package manager"
       $SUDO apk update
       ;;
+    centos|rhel|rocky|almalinux|fedora)
+      # Detect package manager (DNF preferred over YUM)
+      if command -v dnf &> /dev/null; then
+        PACKAGE_MANAGER="dnf"
+        echo "[INFO] Detected DNF package manager"
+        $SUDO dnf check-update || true  # Don't fail on available updates
+      elif command -v yum &> /dev/null; then
+        PACKAGE_MANAGER="yum"
+        echo "[INFO] Detected YUM package manager"
+        $SUDO yum check-update || true  # Don't fail on available updates
+      else
+        echo "[ERROR] Neither DNF nor YUM package manager found"
+        exit 1
+      fi
+      ;;
     *)
       echo "[ERROR] Unsupported or unrecognized distro: $OS_ID"
       exit 1
@@ -63,6 +78,10 @@ if ! command -v git &> /dev/null; then
     $SUDO apt-get install -y git
   elif [[ $PACKAGE_MANAGER == "apk" ]]; then
     $SUDO apk add git
+  elif [[ $PACKAGE_MANAGER == "dnf" ]]; then
+    $SUDO dnf install -y git
+  elif [[ $PACKAGE_MANAGER == "yum" ]]; then
+    $SUDO yum install -y git
   else
     echo "[ERROR] Unsupported package manager: $PACKAGE_MANAGER"
     exit 1

@@ -13,6 +13,10 @@ install_python3() {
       $SUDO apk add python3 py3-pip
       ;;
 
+    fedora)
+      $SUDO ${PACKAGE_MANAGER:-dnf} install -y python3 python3-pip
+      ;;
+
     *)
       echo "[ERROR] python3 install not supported on distro: $DISTRO_NAME"
       exit 1

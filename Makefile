@@ -1,16 +1,17 @@
-.PHONY: test test-docker test-alpine test-ubuntu clean clean-docker help
+.PHONY: test test-docker test-alpine test-ubuntu test-rocky clean clean-docker help
 
 # Default target
 help:
 	@echo "Available targets:"
-	@echo "  test-docker        - Run all Docker tests (Alpine + Ubuntu)"
+	@echo "  test-docker        - Run all Docker tests (Alpine + Ubuntu + Rocky)"
 	@echo "  test-alpine        - Test Alpine Linux container only"
 	@echo "  test-ubuntu        - Test Ubuntu container only"
+	@echo "  test-rocky         - Test Rocky Linux container only"
 	@echo "  clean-docker       - Remove test Docker images"
 	@echo "  help               - Show this help message"
 
 # Test all Docker containers
-test-docker: test-alpine test-ubuntu
+test-docker: test-alpine test-ubuntu test-rocky
 	@echo "✅ All Docker tests completed!"
 
 # Test Alpine Linux
@@ -25,10 +26,16 @@ test-ubuntu:
 	docker build -f tests/integration/ubuntu.Dockerfile -t toolbelt-test:ubuntu .
 	@echo "✅ Ubuntu test passed!"
 
+# Test Rocky Linux (RHEL family)
+test-rocky:
+	@echo "🐧 Testing Rocky Linux container..."
+	docker build -f tests/integration/rocky.Dockerfile -t toolbelt-test:rocky .
+	@echo "✅ Rocky Linux test passed!"
+
 # Clean up Docker test images
 clean-docker:
 	@echo "🧹 Cleaning up Docker test images..."
-	docker rmi toolbelt-test:alpine toolbelt-test:ubuntu 2>/dev/null || true
+	docker rmi toolbelt-test:alpine toolbelt-test:ubuntu toolbelt-test:rocky 2>/dev/null || true
 	@echo "✅ Cleanup completed!"
 
 # Alias for test-docker

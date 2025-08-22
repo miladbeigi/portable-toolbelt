@@ -13,6 +13,10 @@ install_openssl() {
       $SUDO apk add openssl
       ;;
 
+    fedora)
+      $SUDO ${PACKAGE_MANAGER:-dnf} install -y openssl
+      ;;
+
     *)
       echo "[ERROR] openssl install not supported on distro: $DISTRO_NAME"
       exit 1

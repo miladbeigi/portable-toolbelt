@@ -13,6 +13,10 @@ install_wget() {
       $SUDO apk add wget
       ;;
 
+    fedora)
+      $SUDO ${PACKAGE_MANAGER:-dnf} install -y wget
+      ;;
+
     *)
       echo "[ERROR] wget install not supported on distro: $DISTRO_NAME"
       exit 1

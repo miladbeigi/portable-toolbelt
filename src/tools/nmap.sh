@@ -13,6 +13,10 @@ install_nmap() {
       $SUDO apk add nmap
       ;;
 
+    fedora)
+      $SUDO ${PACKAGE_MANAGER:-dnf} install -y nmap
+      ;;
+
     *)
       echo "[ERROR] nmap install not supported on distro: $DISTRO_NAME"
       exit 1

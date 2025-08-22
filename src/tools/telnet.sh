@@ -9,6 +9,9 @@ install_telnet() {
         "alpine")
             $SUDO apk add --no-cache busybox-extras
             ;;
+        "fedora")
+            $SUDO ${PACKAGE_MANAGER:-dnf} install -y telnet
+            ;;
         *)
             echo "[ERROR] Unsupported distribution: $DISTRO_NAME"
             exit 1
