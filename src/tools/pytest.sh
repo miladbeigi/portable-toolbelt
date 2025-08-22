@@ -15,6 +15,11 @@ install_pytest() {
       $SUDO apk add py3-pytest
       ;;
 
+    fedora)
+      # Use RHEL/Fedora package
+      $SUDO ${PACKAGE_MANAGER:-dnf} install -y python3-pytest
+      ;;
+
     *)
       echo "[ERROR] pytest install not supported on distro: $DISTRO_NAME"
       exit 1

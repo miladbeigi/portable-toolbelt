@@ -13,6 +13,10 @@ install_gpg() {
       $SUDO apk add gnupg
       ;;
 
+    fedora)
+      $SUDO ${PACKAGE_MANAGER:-dnf} install -y gnupg2
+      ;;
+
     *)
       echo "[ERROR] gpg install not supported on distro: $DISTRO_NAME"
       exit 1
