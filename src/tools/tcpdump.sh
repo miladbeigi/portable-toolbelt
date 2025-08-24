@@ -2,23 +2,28 @@
 set -e
 
 install_tcpdump() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      $SUDO apt update -y
-      $SUDO apt install -y tcpdump
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y tcpdump
       ;;
-
     alpine)
-      $SUDO apk update
-      $SUDO apk add tcpdump
+      $SUDO $PACKAGE_MANAGER add tcpdump
       ;;
-
-    fedora)
-      $SUDO ${PACKAGE_MANAGER:-dnf} install -y tcpdump
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y tcpdump
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y tcpdump
+          ;;
+        *)
+          echo "[ERROR] Tcpdump install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
       ;;
-
     *)
-      echo "[ERROR] tcpdump install not supported on distro: $DISTRO_NAME"
+      echo "[ERROR] Tcpdump install not supported on this distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac

@@ -9,12 +9,11 @@ on:
     branches: main
 
 jobs:
-  # Integration tests using matrix strategy
   integration:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu, alpine]
+        os: [ubuntu, alpine, redhat]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,4 +24,4 @@ jobs:
       - name: Build and test ${{ matrix.os }} integration
         run: |
           echo "🔧 Building ${{ matrix.os }} integration test container..."
-          docker build -f tests/integration/${{ matrix.os }}.Dockerfile -t toolbelt-${{ matrix.os }}-test .
+          docker build --build-arg PROFILE=all -f tests/integration/${{ matrix.os }}.Dockerfile -t toolbelt-${{ matrix.os }}-test .

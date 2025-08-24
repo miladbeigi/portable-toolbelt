@@ -1,20 +1,31 @@
 #!/usr/bin/env bash
 
+set -e
+
 install_nethogs() {
-    case "$DISTRO_NAME" in
-        "ubuntu"|"debian")
-            $SUDO apt-get update
-            $SUDO apt-get install -y nethogs
-            ;;
-        "alpine")
-            $SUDO apk add --no-cache nethogs
-            ;;
-        "fedora")
-            $SUDO ${PACKAGE_MANAGER:-dnf} install -y nethogs
-            ;;
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y nethogs
+      ;;
+    alpine)
+      $SUDO $PACKAGE_MANAGER add nethogs
+      ;;
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y nethogs
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y nethogs
+          ;;
         *)
-            echo "[ERROR] Unsupported distribution: $DISTRO_NAME"
-            exit 1
-            ;;
-    esac
+          echo "[ERROR] Nethogs install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
+      ;;
+    *)
+      echo "[ERROR] Nethogs install not supported on this distro: $DISTRO_FAMILY"
+      exit 1
+      ;;
+  esac
 }

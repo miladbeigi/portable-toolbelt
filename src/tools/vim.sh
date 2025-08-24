@@ -3,20 +3,28 @@
 set -e
 
 install_vim() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      $SUDO apt update -y
-      $SUDO apt install -y vim
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y vim
       ;;
     alpine)
-      $SUDO apk update
-      $SUDO apk add vim
+      $SUDO $PACKAGE_MANAGER add vim
       ;;
-    fedora)
-      $SUDO ${PACKAGE_MANAGER:-dnf} install -y vim-enhanced
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y vim-enhanced
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y vim-enhanced
+          ;;
+        *)
+          echo "[ERROR] Vim install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
       ;;
     *)
-      echo "[ERROR] Vim install not supported on this distro: $DISTRO_NAME"
+      echo "[ERROR] Vim install not supported on this distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac

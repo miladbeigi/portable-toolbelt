@@ -1,20 +1,31 @@
 #!/usr/bin/env bash
 
+set -e
+
 install_net-tools() {
-    case "$DISTRO_NAME" in
-        "ubuntu"|"debian")
-            $SUDO apt-get update
-            $SUDO apt-get install -y net-tools
-            ;;
-        "alpine")
-            $SUDO apk add --no-cache net-tools
-            ;;
-        "fedora")
-            $SUDO ${PACKAGE_MANAGER:-dnf} install -y net-tools
-            ;;
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y net-tools
+      ;;
+    alpine)
+      $SUDO $PACKAGE_MANAGER add net-tools
+      ;;
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y net-tools
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y net-tools
+          ;;
         *)
-            echo "[ERROR] Unsupported distribution: $DISTRO_NAME"
-            exit 1
-            ;;
-    esac
+          echo "[ERROR] Net-tools install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
+      ;;
+    *)
+      echo "[ERROR] Net-tools install not supported on this distro: $DISTRO_FAMILY"
+      exit 1
+      ;;
+  esac
 }

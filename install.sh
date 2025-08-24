@@ -13,7 +13,7 @@ source src/core/set_sudo.sh
 
 # --------- OS Detection --------------
 detect_os
-echo "[INFO] Detected OS: $DISTRO_NAME"
+echo "[INFO] Detected OS Family: $DISTRO_FAMILY"
 
 # --------- Parse Arguments -----------
 for arg in "$@"; do

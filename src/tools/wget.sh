@@ -2,23 +2,28 @@
 set -e
 
 install_wget() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      $SUDO apt update -y
-      $SUDO apt install -y wget
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y wget
       ;;
-
     alpine)
-      $SUDO apk update
-      $SUDO apk add wget
+      $SUDO $PACKAGE_MANAGER add wget
       ;;
-
-    fedora)
-      $SUDO ${PACKAGE_MANAGER:-dnf} install -y wget
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y wget
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y wget
+          ;;
+        *)
+          echo "[ERROR] Wget install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
       ;;
-
     *)
-      echo "[ERROR] wget install not supported on distro: $DISTRO_NAME"
+      echo "[ERROR] Wget install not supported on this distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac

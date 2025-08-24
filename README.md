@@ -179,8 +179,8 @@ curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=all
 ## 🔧 How It Works
 
 1. **OS Detection**: Automatically detects your Linux distribution (Ubuntu/Debian/Pop!_OS, Alpine, RHEL family)
-2. **Package Manager Selection**: Uses the appropriate package manager (apt/apk/dnf/yum)
-3. **Tool Installation**: Installs tools using native package managers with distribution-specific package names
+2. **Package Manager Selection**: Uses the appropriate package manager (apt/apk/dnf/yum) based on the `Distro_family` variable
+3. **Tool Installation**: Installs tools using native package managers with distribution-specific package names, now using the `package_manager` variable
 4. **Profile Processing**: Loads tool lists from profile files
 
 ## 🏗️ Architecture

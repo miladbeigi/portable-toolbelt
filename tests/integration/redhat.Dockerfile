@@ -1,8 +1,8 @@
-FROM ubuntu:latest
+FROM fedora:latest
 
 ARG PROFILE=${PROFILE}
 
-RUN apt update && apt install -y bash
+RUN dnf update -y && dnf install -y bash
 
 # Copy the project files
 COPY . /toolbelt

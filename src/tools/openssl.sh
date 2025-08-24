@@ -2,23 +2,28 @@
 set -e
 
 install_openssl() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      $SUDO apt update -y
-      $SUDO apt install -y openssl
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y openssl
       ;;
-
     alpine)
-      $SUDO apk update
-      $SUDO apk add openssl
+      $SUDO $PACKAGE_MANAGER add openssl
       ;;
-
-    fedora)
-      $SUDO ${PACKAGE_MANAGER:-dnf} install -y openssl
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y openssl
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y openssl
+          ;;
+        *)
+          echo "[ERROR] OpenSSL install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
       ;;
-
     *)
-      echo "[ERROR] openssl install not supported on distro: $DISTRO_NAME"
+      echo "[ERROR] OpenSSL install not supported on this distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac

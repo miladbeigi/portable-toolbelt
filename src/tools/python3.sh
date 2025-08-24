@@ -2,23 +2,28 @@
 set -e
 
 install_python3() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      $SUDO apt update -y
-      $SUDO apt install -y python3 python3-venv python3-pip
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y python3 python3-venv python3-pip
       ;;
-
     alpine)
-      $SUDO apk update
-      $SUDO apk add python3 py3-pip
+      $SUDO $PACKAGE_MANAGER add python3 py3-pip
       ;;
-
-    fedora)
-      $SUDO ${PACKAGE_MANAGER:-dnf} install -y python3 python3-pip
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y python3 python3-pip
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y python3 python3-pip
+          ;;
+        *)
+          echo "[ERROR] Python3 install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
       ;;
-
     *)
-      echo "[ERROR] python3 install not supported on distro: $DISTRO_NAME"
+      echo "[ERROR] Python3 install not supported on this distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac

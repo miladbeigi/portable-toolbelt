@@ -2,23 +2,28 @@
 set -e
 
 install_screen() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      $SUDO apt update -y
-      $SUDO apt install -y screen
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y screen
       ;;
-
     alpine)
-      $SUDO apk update
-      $SUDO apk add screen
+      $SUDO $PACKAGE_MANAGER add screen
       ;;
-
-    fedora)
-      $SUDO ${PACKAGE_MANAGER:-dnf} install -y screen
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y screen
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y screen
+          ;;
+        *)
+          echo "[ERROR] Screen install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
       ;;
-
     *)
-      echo "[ERROR] screen install not supported on distro: $DISTRO_NAME"
+      echo "[ERROR] Screen install not supported on this distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac

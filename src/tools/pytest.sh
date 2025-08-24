@@ -2,26 +2,28 @@
 set -e
 
 install_pytest() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      # Use apt package for system install
-      $SUDO apt update -y
-      $SUDO apt install -y python3-pytest
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y python3-pytest
       ;;
-
     alpine)
-      # Use native Alpine package
-      $SUDO apk update
-      $SUDO apk add py3-pytest
+      $SUDO $PACKAGE_MANAGER add py3-pytest
       ;;
-
-    fedora)
-      # Use RHEL/Fedora package
-      $SUDO ${PACKAGE_MANAGER:-dnf} install -y python3-pytest
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y python3-pytest
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y python3-pytest
+          ;;
+        *)
+          echo "[ERROR] Pytest install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
       ;;
-
     *)
-      echo "[ERROR] pytest install not supported on distro: $DISTRO_NAME"
+      echo "[ERROR] Pytest install not supported on this distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac

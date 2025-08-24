@@ -1,45 +1,36 @@
-.PHONY: test test-docker test-alpine test-ubuntu test-rocky clean clean-docker help
+.PHONY: test test-docker test-apk test-apt test-dnf test-yum help
 
 # Default target
 help:
 	@echo "Available targets:"
-	@echo "  test-docker        - Run all Docker tests (Alpine + Ubuntu + Rocky)"
-	@echo "  test-alpine        - Test Alpine Linux container only"
-	@echo "  test-ubuntu        - Test Ubuntu container only"
-	@echo "  test-rocky         - Test Rocky Linux container only"
-	@echo "  clean-docker       - Remove test Docker images"
-	@echo "  help               - Show this help message"
+	@echo "  test-docker     - Run all Docker tests (Alpine + Ubuntu + Redhat)"
+	@echo "  test-apk        - Test Alpine Linux container only"
+	@echo "  test-apt        - Test Ubuntu container only"
+	@echo "  test-dnf        - Test Fedora Linux container using dnf"
+	@echo "  test-yum        - Test Oracle Linux container using yum"
+	@echo "  help            - Show this help message"
 
 # Test all Docker containers
-test-docker: test-alpine test-ubuntu test-rocky
+test-docker: test-apk test-apt test-dnf test-yum
 	@echo "✅ All Docker tests completed!"
 
 # Test Alpine Linux
-test-alpine:
+test-apk:
 	@echo "🐧 Testing Alpine Linux container..."
-	docker build -f tests/integration/alpine.Dockerfile -t toolbelt-test:alpine .
+	docker build --build-arg PROFILE=$(PROFILE)  -f tests/integration/alpine.Dockerfile -t toolbelt-test:alpine .
 	@echo "✅ Alpine Linux test passed!"
 
 # Test Ubuntu
-test-ubuntu:
+test-apt:
 	@echo "🐧 Testing Ubuntu container..."
-	docker build -f tests/integration/ubuntu.Dockerfile -t toolbelt-test:ubuntu .
+	docker build --build-arg PROFILE=$(PROFILE) -f tests/integration/ubuntu.Dockerfile -t toolbelt-test:ubuntu .
 	@echo "✅ Ubuntu test passed!"
 
-# Test Rocky Linux (RHEL family)
-test-rocky:
-	@echo "🐧 Testing Rocky Linux container..."
-	docker build -f tests/integration/rocky.Dockerfile -t toolbelt-test:rocky .
-	@echo "✅ Rocky Linux test passed!"
-
-# Clean up Docker test images
-clean-docker:
-	@echo "🧹 Cleaning up Docker test images..."
-	docker rmi toolbelt-test:alpine toolbelt-test:ubuntu toolbelt-test:rocky 2>/dev/null || true
-	@echo "✅ Cleanup completed!"
+test-dnf:
+	@echo "🐧 Testing Redhat Linux container..."
+	docker build --build-arg PROFILE=$(PROFILE) -f tests/integration/redhat.Dockerfile -t toolbelt-test:redhat .
+	@echo "✅ Redhat Linux test passed!"
 
 # Alias for test-docker
 test: test-docker
 
-# Alias for clean-docker
-clean: clean-docker

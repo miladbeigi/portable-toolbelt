@@ -1,20 +1,31 @@
 #!/usr/bin/env bash
 
+set -e
+
 install_iftop() {
-    case "$DISTRO_NAME" in
-        "ubuntu"|"debian")
-            $SUDO apt-get update
-            $SUDO apt-get install -y iftop
-            ;;
-        "alpine")
-            $SUDO apk add --no-cache iftop
-            ;;
-        "fedora")
-            $SUDO ${PACKAGE_MANAGER:-dnf} install -y iftop
-            ;;
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y iftop
+      ;;
+    alpine)
+      $SUDO $PACKAGE_MANAGER add iftop
+      ;;
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y iftop
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y iftop
+          ;;
         *)
-            echo "[ERROR] Unsupported distribution: $DISTRO_NAME"
-            exit 1
-            ;;
-    esac
+          echo "[ERROR] Iftop install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
+      ;;
+    *)
+      echo "[ERROR] Iftop install not supported on this distro: $DISTRO_FAMILY"
+      exit 1
+      ;;
+  esac
 }

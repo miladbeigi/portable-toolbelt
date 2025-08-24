@@ -6,14 +6,19 @@ detect_os() {
     OS_ID="${ID,,}"  # lowercase
     case "$OS_ID" in
       ubuntu|debian|pop)
-        DISTRO_NAME="ubuntu"
+        DISTRO_FAMILY="debian"
+        PACKAGE_MANAGER="apt"
+        echo "[INFO] Detected package manager: $PACKAGE_MANAGER"
+        $SUDO apt-get update -y
         ;;
       alpine)
-        DISTRO_NAME="alpine"
+        DISTRO_FAMILY="alpine"
+        PACKAGE_MANAGER="apk"
+        echo "[INFO] Detected package manager: $PACKAGE_MANAGER"
+        $SUDO apk update
         ;;
-      centos|rhel|rocky|almalinux|fedora)
-        DISTRO_NAME="fedora"
-        # Detect package manager (DNF preferred over YUM)
+      centos|rhel|fedora|ol)
+        DISTRO_FAMILY="redhat"
         if command -v dnf &> /dev/null; then
           PACKAGE_MANAGER="dnf"
         elif command -v yum &> /dev/null; then
@@ -22,6 +27,8 @@ detect_os() {
           echo "[ERROR] Neither DNF nor YUM package manager found"
           exit 1
         fi
+        echo "[INFO] Detected package manager: $PACKAGE_MANAGER"
+        $SUDO $PACKAGE_MANAGER update -y
         ;;
       *)
         echo "[ERROR] Unsupported or unrecognized distro: $OS_ID"
