@@ -103,7 +103,7 @@ clone_repo() {
 start_installation() {
   echo -e "\n[INFO] Installation starting..."
   cd ~/.local/share/portable-toolbelt/
-  source install.sh
+  source install.sh "$@"
 }
 
 display_ascii_art
@@ -111,4 +111,4 @@ check_sudo
 detect_os_and_package_manager
 install_git_if_needed
 clone_repo
-start_installation
+start_installation "$@"
