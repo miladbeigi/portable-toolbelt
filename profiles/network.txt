@@ -4,8 +4,6 @@ curl
 wget
 nmap
 tcpdump
-ping
-traceroute
 mtr
 dig
 nslookup

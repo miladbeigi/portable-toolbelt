@@ -2,19 +2,28 @@
 set -e
 
 install_gpg() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      $SUDO apt update -y
-      $SUDO apt install -y gnupg
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y gnupg
       ;;
-
     alpine)
-      $SUDO apk update
-      $SUDO apk add gnupg
+      $SUDO $PACKAGE_MANAGER add gnupg
       ;;
-
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y gnupg2
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y gnupg2
+          ;;
+        *)
+          echo "[ERROR] GPG install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
+      ;;
     *)
-      echo "[ERROR] gpg install not supported on distro: $DISTRO_NAME"
+      echo "[ERROR] GPG install not supported on this distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac

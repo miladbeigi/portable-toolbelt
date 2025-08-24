@@ -2,19 +2,28 @@
 set -e
 
 install_jq() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      $SUDO apt update -y
-      $SUDO apt install -y jq
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y jq
       ;;
-
     alpine)
-      $SUDO apk update
-      $SUDO apk add jq
+      $SUDO $PACKAGE_MANAGER add jq
       ;;
-
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y jq
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y jq
+          ;;
+        *)
+          echo "[ERROR] Jq install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
+      ;;
     *)
-      echo "[ERROR] jq install not supported on distro: $DISTRO_NAME"
+      echo "[ERROR] Jq install not supported on this distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac

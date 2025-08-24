@@ -2,19 +2,28 @@
 set -e
 
 install_htop() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
-      $SUDO apt update -y
-      $SUDO apt install -y htop
+  case "$DISTRO_FAMILY" in
+    debian)
+      $SUDO $PACKAGE_MANAGER install -y htop
       ;;
-
     alpine)
-      $SUDO apk update
-      $SUDO apk add htop
+      $SUDO $PACKAGE_MANAGER add htop
       ;;
-
+    redhat)
+      case "$PACKAGE_MANAGER" in
+        dnf)
+          $SUDO $PACKAGE_MANAGER install -y htop
+          ;;
+        yum)
+          $SUDO $PACKAGE_MANAGER install -y htop
+          ;;
+        *)
+          echo "[ERROR] Htop install not supported on this distro: $DISTRO_FAMILY"
+          exit 1
+      esac
+      ;;
     *)
-      echo "[ERROR] htop install not supported on distro: $DISTRO_NAME"
+      echo "[ERROR] Htop install not supported on this distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac

@@ -1,6 +1,6 @@
 # Portable Toolbelt
 
-Portable Toolbelt is a lightweight, cross-platform tool installer for quickly setting up essential development and system administration tools on Linux servers and containers. The project consists of shell scripts that automatically detect the OS and install tools using native package managers (apt for Ubuntu/Debian, apk for Alpine).
+Portable Toolbelt is a lightweight, cross-platform tool installer for quickly setting up essential development and system administration tools on Linux servers and containers. The project consists of shell scripts that automatically detect the OS family using the `DISTRO_FAMILY` variable and install tools using native package managers (apt for Debian, apk for Alpine, dnf/yum for RedHat).
 
 **ALWAYS reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.**
 
@@ -10,13 +10,15 @@ Portable Toolbelt is a lightweight, cross-platform tool installer for quickly se
 - Clone and navigate to repository: `git clone <repo> && cd portable-toolbelt`
 - Test core functionality: `sudo ./install.sh --profile=core` -- takes 2-8 seconds. NEVER CANCEL.
 - Test individual tool: `sudo ./install.sh --tools=jq` -- takes 1-3 seconds. NEVER CANCEL.
-- Test Docker integration: `make test-ubuntu` -- takes 10 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
-- Test Alpine integration: `make test-alpine` -- takes 30 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
+- Test Docker integration: `make test-docker` -- takes 10 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
+- Test Alpine integration: `make test-apk` -- takes 30 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
+- Test Redhat integration: `make test-dnf` -- takes 30 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
+- Test Oracle integration: `make test-yum` -- takes 30 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
 - Test all containers: `make test` -- takes 1-4 minutes total. NEVER CANCEL. Set timeout to 10+ minutes.
 
 ### Dependencies and Requirements:
-- **Operating System**: Ubuntu, Debian, Pop!_OS, or Alpine Linux
-- **Required Tools**: `curl`, `bash` (for Alpine), `sudo` privileges for package installation
+- **Operating System**: Ubuntu, Debian, Pop!_OS, Alpine Linux, RedHat, or Oracle Linux
+- **Required Tools**: `curl`, `bash`, `sudo` privileges for package installation
 - **For Testing**: Docker (for integration tests)
 
 ### Build Process:
@@ -35,37 +37,30 @@ Always run these scenarios after making changes to ensure functionality:
    vim --version && htop --version && curl --version && bash --version
    ```
 
-2. **Individual Tool Validation**:
-   ```bash
-   sudo ./install.sh --tools=jq
-   echo '{"test": "data"}' | jq '.test'
-   ```
-
-3. **Profile Loading Validation**:
+2. **Profile Loading Validation**:
    ```bash
    sudo ./install.sh --profile=dev
    screen -version && jq --version && yq --version
    ```
 
-4. **Multiple Tool Installation**:
+3. **Multiple Tool Installation**:
    ```bash
    sudo ./install.sh --tools=wget,screen
    wget --version && screen -version
    ```
 
-5. **OS Detection Validation**:
+4. **OS Detection Validation**:
    ```bash
    source src/core/detect_os.sh && detect_os && echo "Detected: $DISTRO_NAME"
    ```
 
 ### Docker Integration Testing:
-- Always test both Ubuntu and Alpine: `make test-ubuntu && make test-alpine`
-- Test timing: Ubuntu builds take 10-120 seconds, Alpine builds take 30-120 seconds
+- Always test all OS families: `make test-docker`
 
 ### Manual Validation Requirements:
 - **ALWAYS** verify that installed tools actually execute and show correct versions
 - **ALWAYS** test realistic scenarios: install a profile, then use tools for their intended purpose
-- **ALWAYS** test both Ubuntu and Alpine pathways when modifying tool installers
+- **ALWAYS** test all OS families when modifying tool installers
 
 ## Common Tasks
 
@@ -88,8 +83,9 @@ portable-toolbelt/
 ├── tests/             # Testing infrastructure
 │   ├── integration/   # Docker integration tests
 │   │   ├── alpine.Dockerfile
+│   │   ├── redhat.Dockerfile
+│   │   ├── oracle.Dockerfile
 │   │   └── ubuntu.Dockerfile
-│   └── test-docker.sh # Docker testing script
 └── .github/
     └── workflows/
         └── tests.yml  # CI/CD pipeline
@@ -102,8 +98,8 @@ Each tool in `src/tools/*.sh` follows this pattern:
 set -e
 
 install_TOOLNAME() {
-  case "$DISTRO_NAME" in
-    ubuntu|debian|pop)
+  case "$DISTRO_FAMILY" in
+    debian)
       $SUDO apt update -y
       $SUDO apt install -y PACKAGE_NAME
       ;;
@@ -111,8 +107,16 @@ install_TOOLNAME() {
       $SUDO apk update
       $SUDO apk add PACKAGE_NAME
       ;;
+    redhat)
+      $SUDO dnf update -y
+      $SUDO dnf install -y PACKAGE_NAME
+      ;;
+    oracle)
+      $SUDO yum update -y
+      $SUDO yum install -y PACKAGE_NAME
+      ;;
     *)
-      echo "[ERROR] TOOL install not supported on distro: $DISTRO_NAME"
+      echo "[ERROR] TOOL install not supported on distro: $DISTRO_FAMILY"
       exit 1
       ;;
   esac
@@ -130,10 +134,10 @@ install_TOOLNAME() {
 
 #### Installation Failures:
 - **Permission denied**: Use `sudo ./install.sh` (not `./install.sh`)
-- **Package not found**: Check if tool name matches package name in Ubuntu/Alpine repos
+- **Package not found**: Check if tool name matches package name in Ubuntu/Alpine/RedHat/Oracle repos
 
 #### CI/CD Pipeline:
-- Uses GitHub Actions matrix strategy to test Ubuntu and Alpine
+- Uses GitHub Actions matrix strategy to test Ubuntu, Alpine, RedHat, and Oracle
 - Builds Docker containers and runs `./install.sh --profile=all`
 - **Expected runtime**: 2-5 minutes per container build
 
