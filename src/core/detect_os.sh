@@ -17,7 +17,7 @@ detect_os() {
         echo "[INFO] Detected package manager: $PACKAGE_MANAGER"
         $SUDO apk update
         ;;
-      centos|rhel|fedora|ol)
+      centos|rhel|fedora|ol|amzn|amazon)
         DISTRO_FAMILY="redhat"
         if command -v dnf &> /dev/null; then
           PACKAGE_MANAGER="dnf"
