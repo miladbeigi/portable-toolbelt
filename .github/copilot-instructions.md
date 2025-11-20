@@ -14,10 +14,12 @@ Portable Toolbelt is a lightweight, cross-platform tool installer for quickly se
 - Test Alpine integration: `make test-apk` -- takes 30 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
 - Test Redhat integration: `make test-dnf` -- takes 30 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
 - Test Oracle integration: `make test-yum` -- takes 30 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
+- Test Amazon Linux 2: `make test-amazonlinux2` -- takes 30 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
+- Test Amazon Linux 2023: `make test-amazonlinux2023` -- takes 30 seconds to 2 minutes. NEVER CANCEL. Set timeout to 5+ minutes.
 - Test all containers: `make test` -- takes 1-4 minutes total. NEVER CANCEL. Set timeout to 10+ minutes.
 
 ### Dependencies and Requirements:
-- **Operating System**: Ubuntu, Debian, Pop!_OS, Alpine Linux, RedHat, or Oracle Linux
+- **Operating System**: Ubuntu, Debian, Pop!_OS, Alpine Linux, RedHat, Oracle Linux, Amazon Linux 2, or Amazon Linux 2023
 - **Required Tools**: `curl`, `bash`, `sudo` privileges for package installation
 - **For Testing**: Docker (for integration tests)
 

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu, alpine, redhat]
+        os: [ubuntu, alpine, redhat, amazonlinux2, amazonlinux2023]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
