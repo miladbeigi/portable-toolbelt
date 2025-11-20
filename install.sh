@@ -70,9 +70,21 @@ display_tools_to_install() {
   echo ""
 }
 
+# --------- Confirm Installation ----------
+confirm_installation() {
+  read -p "Do you want to proceed with the installation? (y/n): " -n 1 -r
+  echo ""
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "[INFO] Installation cancelled by user."
+    exit 0
+  fi
+  echo ""
+}
+
 # Show tools to be installed
 if [[ ${#TOOLS_TO_INSTALL[@]} -gt 0 ]]; then
   display_tools_to_install
+  confirm_installation
 fi
 
 # --------- Install Tools ----------
