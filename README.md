@@ -9,13 +9,14 @@ A lightweight, cross-platform tool installer for quickly setting up essential de
 - **Individual tool selection**: Install specific tools as needed
 - **One-liner installation**: Simple curl-based setup
 - **Automatic OS detection**: No manual configuration required
-- **Lightweight**: Minimal dependencies, just curl and bash
+- **Lightweight**: Minimal dependencies, just curl, bash, and git
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - `curl` (for installation)
 - `bash` (for Alpine Linux)
+- `git` (automatically installed by boot.sh if not present)
 
 ### Installation
 
@@ -179,8 +180,8 @@ curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=all
 ## 🔧 How It Works
 
 1. **OS Detection**: Automatically detects your Linux distribution (Ubuntu/Debian/Pop!_OS, Alpine, RHEL family)
-2. **Package Manager Selection**: Uses the appropriate package manager (apt/apk/dnf/yum) based on the `Distro_family` variable
-3. **Tool Installation**: Installs tools using native package managers with distribution-specific package names, now using the `package_manager` variable
+2. **Package Manager Selection**: Uses the appropriate package manager (apt/apk/dnf/yum) based on the `DISTRO_FAMILY` variable
+3. **Tool Installation**: Installs tools using native package managers with distribution-specific package names, using the `PACKAGE_MANAGER` variable
 4. **Profile Processing**: Loads tool lists from profile files
 
 ## 🏗️ Architecture
@@ -199,17 +200,16 @@ portable-toolbelt/
 │   └── all.txt        # All tools
 ├── src/
 │   ├── core/          # Core utilities
-│   │   └── detect_os.sh
+│   │   ├── detect_os.sh
+│   │   └── set_sudo.sh
 │   └── tools/         # Individual tool installers
 │       ├── vim.sh
 │       ├── htop.sh
 │       ├── curl.sh
 │       ├── bash.sh
 │       └── ...        # other tool installers
-├── tests/             # Testing infrastructure
-│   ├── integration/   # Docker integration tests
-│   └── test-docker.sh # Docker testing script
-└── configs/           # Configuration files (future use)
+└── tests/             # Testing infrastructure
+    └── integration/   # Docker integration tests
 ```
 
 ## 🧪 Testing
@@ -218,13 +218,14 @@ portable-toolbelt/
 ```bash
 # Test all Docker containers
 make test
+# or
+make test-docker
 
 # Test specific distribution
-make test-alpine
-make test-ubuntu
-
-# Clean up test images
-make clean
+make test-apk      # Alpine Linux
+make test-apt      # Ubuntu/Debian
+make test-dnf      # Fedora/RHEL (dnf)
+make test-yum      # Oracle Linux (yum)
 ```
 
 ### Manual Docker Testing
@@ -234,6 +235,9 @@ docker build -f tests/integration/alpine.Dockerfile -t toolbelt-test:alpine .
 
 # Test Ubuntu
 docker build -f tests/integration/ubuntu.Dockerfile -t toolbelt-test:ubuntu .
+
+# Test Redhat/Fedora
+docker build -f tests/integration/redhat.Dockerfile -t toolbelt-test:redhat .
 ```
 
 ## 📄 License
