@@ -10,4 +10,4 @@ WORKDIR /toolbelt
 
 # Make install script executable and run it
 RUN chmod +x install.sh && \
-    ./install.sh --profile=${PROFILE:-core}
+    ./install.sh --profile=${PROFILE:-core} --yes

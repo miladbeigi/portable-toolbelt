@@ -6,6 +6,7 @@ set -e
 TOOLS_TO_INSTALL=()
 PROFILE=""
 DEFAULT_PROFILE="core"
+AUTO_APPROVE=false
 
 # --------- Load Core Utilities ----------
 source src/core/detect_os.sh
@@ -23,6 +24,9 @@ for arg in "$@"; do
       ;;
     --profile=*)
       PROFILE="${arg#*=}"
+      ;;
+    --yes|-y)
+      AUTO_APPROVE=true
       ;;
     *)
       echo "[INFO] Unknown option: $arg"
@@ -72,6 +76,12 @@ display_tools_to_install() {
 
 # --------- Confirm Installation ----------
 confirm_installation() {
+  if [[ "$AUTO_APPROVE" == "true" ]]; then
+    echo "[INFO] Auto-approval enabled. Proceeding with installation..."
+    echo ""
+    return 0
+  fi
+  
   read -p "Do you want to proceed with the installation? (y/n): " -n 1 -r
   echo ""
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
