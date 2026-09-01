@@ -4,7 +4,7 @@ A lightweight, cross-platform tool installer for quickly setting up essential de
 
 ## ✨ Features
 
-- **Cross-platform support**: Works on Ubuntu, Debian, Pop!_OS, Alpine Linux, and RHEL family (CentOS, RHEL, Fedora, Rocky Linux, AlmaLinux)
+- **Cross-platform support**: Works on Ubuntu, Debian, Pop!_OS, Alpine Linux, RHEL family (CentOS, RHEL, Fedora, Rocky Linux, AlmaLinux), and Amazon Linux (AL2, AL2023)
 - **Profile-based installation**: Pre-configured tool sets for different use cases
 - **Individual tool selection**: Install specific tools as needed
 - **One-liner installation**: Simple curl-based setup
@@ -43,6 +43,16 @@ curl -sSL https://milad.cloud/toolbelt | bash -s
 ```bash
 # Install curl and bash if not present
 apk update && apk add curl bash
+
+# Install with default core profile
+curl -sSL https://milad.cloud/toolbelt | bash -s
+```
+
+**Amazon Linux 2 / AL2023:**
+```bash
+# Install curl if not present
+sudo yum install curl -y
+# or for AL2023: sudo dnf install curl -y
 
 # Install with default core profile
 curl -sSL https://milad.cloud/toolbelt | bash -s
@@ -179,7 +189,7 @@ curl -sSL https://milad.cloud/toolbelt | bash -s -- --profile=all
 
 ## 🔧 How It Works
 
-1. **OS Detection**: Automatically detects your Linux distribution (Ubuntu/Debian/Pop!_OS, Alpine, RHEL family)
+1. **OS Detection**: Automatically detects your Linux distribution (Ubuntu/Debian/Pop!_OS, Alpine, RHEL family, Amazon Linux)
 2. **Package Manager Selection**: Uses the appropriate package manager (apt/apk/dnf/yum) based on the `DISTRO_FAMILY` variable
 3. **Tool Installation**: Installs tools using native package managers with distribution-specific package names, using the `PACKAGE_MANAGER` variable
 4. **Profile Processing**: Loads tool lists from profile files
